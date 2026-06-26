@@ -268,7 +268,7 @@ export function FinanceDashboard({ initialData }: FinanceDashboardProps) {
   }
 
   return (
-    <div className="mx-auto min-h-screen w-full max-w-[430px] pb-[calc(env(safe-area-inset-bottom)+10.5rem)] md:max-w-6xl">
+    <div className="mx-auto min-h-screen w-full max-w-[430px] pb-[calc(env(safe-area-inset-bottom)+6rem)] md:max-w-6xl">
       <header className="flex items-center justify-between px-6 pt-5 pb-2 md:px-4">
         <div className="w-10" />
         <div className="text-center">
