@@ -79,6 +79,14 @@ function categoryIconPath(category: string): string {
   return "/Other.png";
 }
 
+function creatorMetaColor(name: string): string {
+  const normalized = name.trim().toLowerCase();
+
+  if (normalized === "tatyana") return "text-pink-500";
+  if (normalized === "nathan") return "text-blue-600";
+  return "text-zinc-500";
+}
+
 export function DailyExpensesList({ items, onDelete }: DailyExpensesListProps) {
   return (
     <section>
@@ -122,7 +130,7 @@ export function DailyExpensesList({ items, onDelete }: DailyExpensesListProps) {
                     </div>
                     <div className="min-w-0">
                       <p className="truncate text-xl font-semibold text-zinc-900">{categoryLabel}</p>
-                      <p className="truncate text-base text-zinc-500">
+                      <p className={["truncate text-base", creatorMetaColor(item.createdByName)].join(" ")}>
                         {item.createdByName} - {formatDateWithoutYear(item.dateAdded)}
                       </p>
                     </div>
