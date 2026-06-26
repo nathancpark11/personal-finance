@@ -1,36 +1,111 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Personal Finance Dashboard
 
-## Getting Started
+iPhone-first personal finance dashboard built with Next.js App Router, TypeScript, Tailwind CSS, Neon Postgres, and Drizzle ORM.
 
-First, run the development server:
+## Tech Stack
+
+- Next.js App Router
+- TypeScript
+- Tailwind CSS
+- Neon Postgres
+- Drizzle ORM
+- Route handlers for server-side mutations
+
+## Database Setup
+
+1. Create a Neon project
+2. Copy the pooled Postgres connection string
+3. Add it to local environment variables
+
+Create .env.local:
+
+```bash
+DATABASE_URL=postgresql://username:password@hostname/database?sslmode=require
+```
+
+## Install Dependencies
+
+```bash
+npm install
+```
+
+## Run Migrations
+
+Generate migration SQL from schema:
+
+```bash
+npm run db:generate
+```
+
+Apply migrations to Neon:
+
+```bash
+npm run db:migrate
+```
+
+Optional development shortcut:
+
+```bash
+npm run db:push
+```
+
+Seed default household, users, and starter monthly expense rows:
+
+```bash
+npm run db:seed
+```
+
+## Run Locally
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Production Checks
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run lint
+npm run build
+```
 
-## Learn More
+## Deploy to Vercel
 
-To learn more about Next.js, take a look at the following resources:
+1. Push repository to GitHub
+2. Import project in Vercel
+3. Add DATABASE_URL in project Settings > Environment Variables
+4. Deploy
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+Important:
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Do not expose DATABASE_URL to the browser
+- All writes run server-side in route handlers under app/api
+- Keep .env.local out of source control
 
-## Deploy on Vercel
+## Data Model
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Tables:
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- households
+- users
+- income
+- monthly_expenses
+- daily_expenses
+
+Defaults:
+
+- Rent
+- Tithe
+- Savings
+- Car Insurance
+
+## Shared Data Behavior
+
+- Both phones read and write the same household rows in Neon
+- New expenses show on both devices after refresh
+- Remaining to Spend is recalculated as:
+
+```text
+income - monthly_expenses_total - daily_expenses_total
+```
