@@ -309,7 +309,7 @@ export function FinanceDashboard({ initialData }: FinanceDashboardProps) {
       <button
         type="button"
         onClick={() => setAddSheetOpen(true)}
-        className="fixed inset-x-0 bottom-[calc(env(safe-area-inset-bottom)+4.5rem)] z-30 mx-auto h-16 w-[calc(100%-2.6rem)] max-w-[390px] rounded-full bg-[linear-gradient(90deg,#1d4ed8_0%,#1775ff_100%)] text-3xl font-semibold text-white shadow-[0_22px_40px_-24px_rgba(29,78,216,0.9)] md:bottom-6"
+        className="fixed inset-x-0 bottom-[env(safe-area-inset-bottom)] z-30 mx-auto h-16 w-[calc(100%-2.6rem)] max-w-[390px] rounded-full bg-[linear-gradient(90deg,#1d4ed8_0%,#1775ff_100%)] text-3xl font-semibold text-white shadow-[0_22px_40px_-24px_rgba(29,78,216,0.9)] md:bottom-6"
       >
         + Add Expense
       </button>
