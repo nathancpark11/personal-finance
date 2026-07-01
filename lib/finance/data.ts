@@ -30,6 +30,7 @@ const DEFAULT_MONTHLY_EXPENSES = [
 ] as const;
 
 const TITHE_EXPENSE_NAME = "Tithe";
+const BUDGET_ROLLOVER_DAY = 23;
 
 function calculateTithe(totalIncome: number): number {
   return Number((totalIncome * 0.1).toFixed(2));
@@ -41,13 +42,24 @@ export function getCurrentMonthKey(date = new Date()): string {
   return `${year}-${month}`;
 }
 
-function monthRange(monthKey: string): { start: string; end: string } {
-  const [yearStr, monthStr] = monthKey.split("-");
+export function getCurrentBudgetCycleKey(date = new Date()): string {
+  const periodStart = new Date(date);
+  if (periodStart.getDate() < BUDGET_ROLLOVER_DAY) {
+    periodStart.setMonth(periodStart.getMonth() - 1);
+  }
+
+  const year = periodStart.getFullYear();
+  const month = String(periodStart.getMonth() + 1).padStart(2, "0");
+  return `${year}-${month}`;
+}
+
+function budgetCycleRange(cycleKey: string): { start: string; end: string } {
+  const [yearStr, monthStr] = cycleKey.split("-");
   const year = Number(yearStr);
   const month = Number(monthStr);
 
-  const start = new Date(Date.UTC(year, month - 1, 1));
-  const end = new Date(Date.UTC(year, month, 1));
+  const start = new Date(Date.UTC(year, month - 1, BUDGET_ROLLOVER_DAY));
+  const end = new Date(Date.UTC(year, month, BUDGET_ROLLOVER_DAY));
 
   return {
     start: start.toISOString().slice(0, 10),
@@ -106,6 +118,72 @@ async function syncDefaultMonthlyExpenses(householdId: number): Promise<void> {
     });
 }
 
+async function ensureIncomeForMonth(householdId: number, month: string): Promise<string> {
+  const [existingIncome] = await db
+    .select({
+      id: income.id,
+      amount: income.amount,
+      createdAt: income.createdAt,
+      updatedAt: income.updatedAt,
+    })
+    .from(income)
+    .where(and(eq(income.householdId, householdId), eq(income.month, month)))
+    .limit(1);
+
+  if (existingIncome) {
+    const latestIncomeRows = await db
+      .select({ id: income.id, amount: income.amount })
+      .from(income)
+      .where(eq(income.householdId, householdId))
+      .orderBy(desc(income.month))
+      .limit(2);
+
+    const previousIncome = latestIncomeRows.find((row) => row.id !== existingIncome.id);
+    const untouchedAutoZero =
+      existingIncome.amount === "0.00" &&
+      existingIncome.createdAt.getTime() === existingIncome.updatedAt.getTime();
+
+    if (untouchedAutoZero && previousIncome?.amount) {
+      await db
+        .update(income)
+        .set({ amount: previousIncome.amount, updatedAt: new Date() })
+        .where(eq(income.id, existingIncome.id));
+
+      return previousIncome.amount;
+    }
+
+    return existingIncome.amount;
+  }
+
+  const [latestIncome] = await db
+    .select({ amount: income.amount })
+    .from(income)
+    .where(eq(income.householdId, householdId))
+    .orderBy(desc(income.month))
+    .limit(1);
+
+  const amountToCarryForward = latestIncome?.amount ?? "0";
+
+  await db
+    .insert(income)
+    .values({
+      householdId,
+      month,
+      amount: amountToCarryForward,
+    })
+    .onConflictDoNothing({
+      target: [income.householdId, income.month],
+    });
+
+  const [createdIncome] = await db
+    .select({ amount: income.amount })
+    .from(income)
+    .where(and(eq(income.householdId, householdId), eq(income.month, month)))
+    .limit(1);
+
+  return createdIncome?.amount ?? amountToCarryForward;
+}
+
 export async function ensureHousehold(): Promise<{ householdId: number }> {
   const existing = await db.select().from(households).limit(1);
 
@@ -145,8 +223,9 @@ export async function ensureHousehold(): Promise<{ householdId: number }> {
 }
 
 export async function getDashboardData(month = getCurrentMonthKey()): Promise<DashboardData> {
+  const budgetCycle = getCurrentBudgetCycleKey();
   const { householdId } = await ensureHousehold();
-  const { start, end } = monthRange(month);
+  const { start, end } = budgetCycleRange(budgetCycle);
 
   const householdUsers = await db
     .select({ id: users.id, name: users.name, email: users.email })
@@ -165,11 +244,7 @@ export async function getDashboardData(month = getCurrentMonthKey()): Promise<Da
     .where(eq(monthlyExpenses.householdId, householdId))
     .orderBy(asc(monthlyExpenses.sortOrder), asc(monthlyExpenses.id));
 
-  const [incomeRow] = await db
-    .select({ id: income.id, amount: income.amount })
-    .from(income)
-    .where(and(eq(income.householdId, householdId), eq(income.month, month)))
-    .limit(1);
+  const monthlyIncomeAmount = await ensureIncomeForMonth(householdId, month);
 
   const dailyRows = await db
     .select({
@@ -192,7 +267,7 @@ export async function getDashboardData(month = getCurrentMonthKey()): Promise<Da
     )
     .orderBy(desc(dailyExpenses.dateAdded), desc(dailyExpenses.id));
 
-  const totalIncome = incomeRow ? parseAmount(incomeRow.amount) : 0;
+  const totalIncome = parseAmount(monthlyIncomeAmount);
   const titheAmount = calculateTithe(totalIncome);
 
   const monthlyItems = monthlyRows.map((row) => ({

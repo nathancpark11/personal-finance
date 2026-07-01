@@ -40,10 +40,10 @@ export function MonthlyExpensesList({ items, onSave }: MonthlyExpensesListProps)
   return (
     <section>
       <div className="mb-3 px-2">
-        <h2 className="text-3xl font-semibold tracking-tight text-zinc-900">Monthly</h2>
+        <h2 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">Monthly</h2>
       </div>
 
-      <div className="overflow-hidden rounded-[1.35rem] border border-zinc-200/80 bg-white shadow-[0_14px_34px_-24px_rgba(15,23,42,0.36)]">
+      <div className="overflow-hidden rounded-[1.35rem] border border-zinc-200/80 bg-white shadow-[0_14px_34px_-24px_rgba(15,23,42,0.36)] dark:border-zinc-700/80 dark:bg-zinc-900 dark:shadow-[0_14px_34px_-24px_rgba(0,0,0,0.5)]">
         {items.map((item, index) => {
           const isAutoCalculatedTithe = item.name === TITHE_EXPENSE_NAME;
 
@@ -52,13 +52,13 @@ export function MonthlyExpensesList({ items, onSave }: MonthlyExpensesListProps)
             key={item.id}
             className={[
               "flex items-center justify-between gap-3 px-3 py-2.5",
-              index !== items.length - 1 ? "border-b border-zinc-200/80" : "",
+              index !== items.length - 1 ? "border-b border-zinc-200/80 dark:border-zinc-700/80" : "",
             ].join(" ")}
           >
             <div>
-              <p className="text-2xl leading-none font-semibold text-zinc-900">{item.name}</p>
+              <p className="text-2xl leading-none font-semibold text-zinc-900 dark:text-zinc-50">{item.name}</p>
               {isAutoCalculatedTithe ? (
-                <p className="mt-1 text-xs font-medium text-zinc-500">Auto (10% of income)</p>
+                <p className="mt-1 text-xs font-medium text-zinc-500 dark:text-zinc-400">Auto (10% of income)</p>
               ) : null}
             </div>
 
@@ -89,8 +89,8 @@ export function MonthlyExpensesList({ items, onSave }: MonthlyExpensesListProps)
                 className={[
                   "h-11 w-full rounded-xl border px-3 text-right text-2xl font-semibold tabular-nums outline-none",
                   isAutoCalculatedTithe
-                    ? "border-zinc-200 bg-zinc-50 text-zinc-500"
-                    : "border-zinc-300 bg-white text-zinc-900 ring-[var(--accent)]/20 focus:ring-4",
+                    ? "border-zinc-200 bg-zinc-50 text-zinc-500 dark:border-zinc-700 dark:bg-zinc-800 dark:text-zinc-400"
+                    : "border-zinc-300 bg-white text-zinc-900 ring-[var(--accent)]/20 focus:ring-4 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-50",
                 ].join(" ")}
               />
             </div>

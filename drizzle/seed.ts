@@ -1,5 +1,5 @@
 import { config as loadEnv } from "dotenv";
-import { and, eq } from "drizzle-orm";
+import { and, desc, eq } from "drizzle-orm";
 import { drizzle } from "drizzle-orm/neon-http";
 import { neon } from "@neondatabase/serverless";
 
@@ -115,7 +115,18 @@ async function seed() {
     .limit(1);
 
   if (!existingIncome[0]) {
-    await db.insert(income).values({ householdId, month, amount: "0" });
+    const [latestIncome] = await db
+      .select({ amount: income.amount })
+      .from(income)
+      .where(eq(income.householdId, householdId))
+      .orderBy(desc(income.month))
+      .limit(1);
+
+    await db.insert(income).values({
+      householdId,
+      month,
+      amount: latestIncome?.amount ?? "0",
+    });
   }
 
   console.log("Seed complete.");

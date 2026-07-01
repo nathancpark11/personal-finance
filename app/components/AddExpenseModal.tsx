@@ -86,19 +86,19 @@ export function AddExpenseModal({ isOpen, users, onClose, onCreate }: AddExpense
       />
       <section
         className={[
-          "fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[430px] rounded-t-3xl border border-zinc-200 bg-white px-4 pt-4 pb-[calc(env(safe-area-inset-bottom)+1rem)] shadow-2xl transition-transform duration-300",
+          "fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-[430px] rounded-t-3xl border border-zinc-200 bg-white px-4 pt-4 pb-[calc(env(safe-area-inset-bottom)+1rem)] shadow-2xl transition-transform duration-300 dark:border-zinc-700 dark:bg-zinc-900",
           isOpen ? "translate-y-0" : "translate-y-full",
         ].join(" ")}
         role="dialog"
         aria-modal="true"
         aria-label="Add expense"
       >
-        <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-zinc-300" />
-        <h2 className="text-lg font-semibold text-zinc-900">Add Expense</h2>
+        <div className="mx-auto mb-4 h-1.5 w-12 rounded-full bg-zinc-300 dark:bg-zinc-600" />
+        <h2 className="text-lg font-semibold text-zinc-900 dark:text-zinc-50">Add Expense</h2>
 
         <form className="mt-4 space-y-3" onSubmit={handleSubmit}>
           <label className="block">
-            <span className="text-sm font-medium text-zinc-700">Amount</span>
+            <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Amount</span>
             <input
               type="number"
               min="0"
@@ -112,18 +112,18 @@ export function AddExpenseModal({ isOpen, users, onClose, onCreate }: AddExpense
                   setAmount(roundUpToDollar(parsedAmount).toString());
                 }
               }}
-              className="mt-1 h-12 w-full rounded-xl border border-zinc-300 px-4 text-base outline-none ring-[var(--accent)]/20 focus:ring-4"
+              className="mt-1 h-12 w-full rounded-xl border border-zinc-300 bg-white px-4 text-base text-zinc-900 outline-none ring-[var(--accent)]/20 focus:ring-4 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-50"
               placeholder="0"
               required
             />
           </label>
 
           <label className="block">
-            <span className="text-sm font-medium text-zinc-700">Category</span>
+            <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Category</span>
             <select
               value={category}
               onChange={(event) => setCategory(event.target.value)}
-              className="mt-1 h-12 w-full rounded-xl border border-zinc-300 px-3 text-base outline-none ring-[var(--accent)]/20 focus:ring-4"
+              className="mt-1 h-12 w-full rounded-xl border border-zinc-300 bg-white px-3 text-base text-zinc-900 outline-none ring-[var(--accent)]/20 focus:ring-4 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-50"
               required
             >
               <option value="" disabled>
@@ -138,11 +138,11 @@ export function AddExpenseModal({ isOpen, users, onClose, onCreate }: AddExpense
           </label>
 
           <label className="block">
-            <span className="text-sm font-medium text-zinc-700">Note</span>
+            <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Note</span>
             <textarea
               value={note}
               onChange={(event) => setNote(event.target.value)}
-              className="mt-1 min-h-24 w-full rounded-xl border border-zinc-300 px-4 py-3 text-base outline-none ring-[var(--accent)]/20 focus:ring-4"
+              className="mt-1 min-h-24 w-full rounded-xl border border-zinc-300 bg-white px-4 py-3 text-base text-zinc-900 outline-none ring-[var(--accent)]/20 focus:ring-4 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-50"
               placeholder="Optional"
               maxLength={300}
             />
@@ -150,11 +150,11 @@ export function AddExpenseModal({ isOpen, users, onClose, onCreate }: AddExpense
 
           <div className="grid grid-cols-1 gap-3">
             <label className="block">
-              <span className="text-sm font-medium text-zinc-700">Added by</span>
+              <span className="text-sm font-medium text-zinc-700 dark:text-zinc-300">Added by</span>
               <select
                 value={createdBy || defaultUser}
                 onChange={(event) => setCreatedBy(Number(event.target.value))}
-                className="mt-1 h-12 w-full rounded-xl border border-zinc-300 px-3 text-base outline-none ring-[var(--accent)]/20 focus:ring-4"
+                className="mt-1 h-12 w-full rounded-xl border border-zinc-300 bg-white px-3 text-base text-zinc-900 outline-none ring-[var(--accent)]/20 focus:ring-4 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-50"
               >
                 {users.map((user) => (
                   <option key={user.id} value={user.id}>

@@ -1,11 +1,19 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 :root {
   --background: #f2f4f8;
   --foreground: #101828;
   --app-bg: #f2f4f8;
   --accent: #1d4ed8;
   --positive: #3fa66a;
+}
+
+.dark {
+  --background: #09090b;
+  --foreground: #fafafa;
+  --app-bg: #09090b;
 }
 
 @theme inline {
@@ -23,6 +31,80 @@ body {
   text-rendering: optimizeLegibility;
   background-image: radial-gradient(circle at top, #f8fafc 0%, #eef2f7 52%, #ecf1f7 100%);
 }
+
+.dark body {
+  background-image: radial-gradient(circle at top, #111113 0%, #0c0c10 52%, #09090b 100%);
+}
+
+/*
+ * Turbopack (next dev) wraps dark: utilities in @media (prefers-color-scheme: dark)
+ * instead of generating class-based selectors. These explicit .dark overrides
+ * activate every dark: class when the .dark class is on <html>.
+ */
+
+/* Backgrounds */
+.dark .dark\:bg-zinc-100 { background-color: #f4f4f5; }
+.dark .dark\:bg-zinc-600 { background-color: #52525b; }
+.dark .dark\:bg-zinc-700 { background-color: #3f3f46; }
+.dark .dark\:bg-zinc-800 { background-color: #27272a; }
+.dark .dark\:bg-zinc-900 { background-color: #18181b; }
+.dark .dark\:bg-amber-900\/40  { background-color: rgba(120,53,15,0.4); }
+.dark .dark\:bg-blue-900\/40   { background-color: rgba(30,58,138,0.4); }
+.dark .dark\:bg-emerald-900\/40{ background-color: rgba(6,78,59,0.4); }
+.dark .dark\:bg-indigo-900\/40 { background-color: rgba(49,46,129,0.4); }
+.dark .dark\:bg-orange-900\/40 { background-color: rgba(124,45,18,0.4); }
+.dark .dark\:bg-pink-900\/40   { background-color: rgba(131,24,67,0.4); }
+.dark .dark\:bg-purple-900\/40 { background-color: rgba(88,28,135,0.4); }
+.dark .dark\:bg-sky-900\/40    { background-color: rgba(12,74,110,0.4); }
+.dark .dark\:bg-teal-900\/40   { background-color: rgba(19,78,74,0.4); }
+.dark .dark\:bg-violet-900\/40 { background-color: rgba(76,29,149,0.4); }
+
+/* Hover backgrounds */
+.dark .dark\:hover\:bg-zinc-700:hover { background-color: #3f3f46; }
+.dark .dark\:hover\:bg-zinc-800:hover { background-color: #27272a; }
+
+/* Focus backgrounds */
+.dark .dark\:focus\:bg-zinc-800:focus { background-color: #27272a; }
+
+/* Borders */
+.dark .dark\:border-zinc-100    { border-color: #f4f4f5; }
+.dark .dark\:border-zinc-600    { border-color: #52525b; }
+.dark .dark\:border-zinc-700    { border-color: #3f3f46; }
+.dark .dark\:border-zinc-700\/80{ border-color: rgba(63,63,70,0.8); }
+
+/* Focus borders */
+.dark .dark\:focus\:border-blue-400:focus  { border-color: #60a5fa; }
+.dark .dark\:focus\:border-zinc-600:focus  { border-color: #52525b; }
+
+/* Text */
+.dark .dark\:text-zinc-50  { color: #fafafa; }
+.dark .dark\:text-zinc-100 { color: #f4f4f5; }
+.dark .dark\:text-zinc-300 { color: #d4d4d8; }
+.dark .dark\:text-zinc-400 { color: #a1a1aa; }
+.dark .dark\:text-zinc-500 { color: #71717a; }
+.dark .dark\:text-zinc-900 { color: #18181b; }
+.dark .dark\:text-amber-300  { color: #fcd34d; }
+.dark .dark\:text-blue-300   { color: #93c5fd; }
+.dark .dark\:text-emerald-300{ color: #6ee7b7; }
+.dark .dark\:text-indigo-300 { color: #a5b4fc; }
+.dark .dark\:text-orange-300 { color: #fdba74; }
+.dark .dark\:text-pink-300   { color: #f9a8d4; }
+.dark .dark\:text-purple-300 { color: #d8b4fe; }
+.dark .dark\:text-sky-300    { color: #7dd3fc; }
+.dark .dark\:text-teal-300   { color: #5eead4; }
+.dark .dark\:text-violet-300 { color: #c4b5fd; }
+
+/* Hover text */
+.dark .dark\:hover\:text-zinc-300:hover { color: #d4d4d8; }
+
+/* SVG fills and strokes */
+.dark .dark\:fill-zinc-50  { fill: #fafafa; }
+.dark .dark\:fill-zinc-300 { fill: #d4d4d8; }
+.dark .dark\:fill-zinc-400 { fill: #a1a1aa; }
+.dark .dark\:stroke-zinc-700 { stroke: #3f3f46; }
+
+/* Icon blend-mode fix — multiply is invisible on dark backgrounds */
+.dark .mix-blend-multiply { mix-blend-mode: normal; }
 
 * {
   -webkit-tap-highlight-color: transparent;

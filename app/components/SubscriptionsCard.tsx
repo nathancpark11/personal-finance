@@ -90,18 +90,18 @@ export function SubscriptionsCard({
   return (
     <section>
       <div className="mb-3 flex w-full items-center justify-between px-2 text-left">
-        <h2 className="text-3xl font-semibold tracking-tight text-zinc-900">Subscriptions</h2>
+        <h2 className="text-3xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">Subscriptions</h2>
         <p className="text-sm font-semibold text-rose-700/90">{asCurrencyRoundedUp(headerTotal)}</p>
       </div>
 
-      <div className="overflow-hidden rounded-[1.35rem] border border-zinc-200/80 bg-white shadow-[0_14px_34px_-24px_rgba(15,23,42,0.36)]">
+      <div className="overflow-hidden rounded-[1.35rem] border border-zinc-200/80 bg-white shadow-[0_14px_34px_-24px_rgba(15,23,42,0.36)] dark:border-zinc-700/80 dark:bg-zinc-900 dark:shadow-[0_14px_34px_-24px_rgba(0,0,0,0.5)]">
             {displayedItems.length > 0 ? (
               displayedItems.map((item, index) => (
                 <div
                   key={item.id}
                   className={[
                     "flex items-center justify-between gap-3 px-3 py-2.5",
-                    index !== displayedItems.length - 1 ? "border-b border-zinc-200/80" : "",
+                    index !== displayedItems.length - 1 ? "border-b border-zinc-200/80 dark:border-zinc-700/80" : "",
                   ].join(" ")}
                 >
                   <input
@@ -121,7 +121,7 @@ export function SubscriptionsCard({
                         event.currentTarget.blur();
                       }
                     }}
-                    className="min-w-0 flex-1 rounded-md border border-transparent bg-transparent px-1 text-xl leading-none font-semibold text-zinc-900 outline-none focus:border-zinc-300 focus:bg-white"
+                    className="min-w-0 flex-1 rounded-md border border-transparent bg-transparent px-1 text-xl leading-none font-semibold text-zinc-900 outline-none focus:border-zinc-300 focus:bg-white dark:text-zinc-50 dark:focus:border-zinc-600 dark:focus:bg-zinc-800"
                     maxLength={80}
                   />
 
@@ -146,7 +146,7 @@ export function SubscriptionsCard({
                             event.currentTarget.blur();
                           }
                         }}
-                        className="h-11 w-full rounded-xl border border-zinc-300 bg-white px-3 text-right text-2xl font-semibold tabular-nums text-zinc-900 outline-none ring-[var(--accent)]/20 focus:ring-4"
+                        className="h-11 w-full rounded-xl border border-zinc-300 bg-white px-3 text-right text-2xl font-semibold tabular-nums text-zinc-900 outline-none ring-[var(--accent)]/20 focus:ring-4 dark:border-zinc-600 dark:bg-zinc-800 dark:text-zinc-50"
                       />
                     </div>
                     <button
@@ -169,7 +169,7 @@ export function SubscriptionsCard({
                 <button
                   type="button"
                   onClick={() => setIsOpen((previous) => !previous)}
-                  className="h-8 w-full rounded-lg border border-zinc-300 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50"
+                  className="h-8 w-full rounded-lg border border-zinc-300 text-xs font-semibold text-zinc-700 transition hover:bg-zinc-50 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-800"
                   aria-expanded={isOpen}
                   aria-label={isOpen ? "Show fewer subscriptions" : "View all subscriptions"}
                 >
@@ -182,7 +182,7 @@ export function SubscriptionsCard({
               <div
                 className={[
                   "px-3 py-2.5",
-                  visibleItems.length > 0 ? "border-t border-zinc-200/80" : "",
+                  visibleItems.length > 0 ? "border-t border-zinc-200/80 dark:border-zinc-700/80" : "",
                 ].join(" ")}
               >
                 <button
@@ -191,7 +191,7 @@ export function SubscriptionsCard({
                     void onAdd();
                   }}
                   disabled={adding}
-                  className="h-9 w-full rounded-lg border border-zinc-300 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-60"
+                  className="h-9 w-full rounded-lg border border-zinc-300 text-sm font-semibold text-zinc-700 transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-60 dark:border-zinc-600 dark:text-zinc-300 dark:hover:bg-zinc-800"
                 >
                   {adding ? "Adding..." : "+ Add Subscription"}
                 </button>

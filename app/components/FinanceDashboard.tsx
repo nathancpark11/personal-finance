@@ -7,6 +7,7 @@ import { AddExpenseModal } from "@/app/components/AddExpenseModal";
 import { DailyExpensesList } from "@/app/components/DailyExpensesList";
 import { HeaderSummary } from "@/app/components/HeaderSummary";
 import { MonthlyExpensesList } from "@/app/components/MonthlyExpensesList";
+import { SettingsPanel } from "@/app/components/SettingsPanel";
 import { SubscriptionsCard } from "@/app/components/SubscriptionsCard";
 import type { DashboardData, DailyExpenseItem } from "@/lib/finance/types";
 
@@ -269,27 +270,24 @@ export function FinanceDashboard({ initialData }: FinanceDashboardProps) {
 
   return (
     <div className="mx-auto min-h-screen w-full max-w-[430px] pb-[calc(env(safe-area-inset-bottom)+6rem)] md:max-w-6xl">
-      <header className="flex items-center justify-between px-6 pt-5 pb-2 md:px-4">
+      <header className="relative flex items-center justify-between px-6 pt-5 pb-2 md:px-4">
+        <p className="absolute top-2 right-6 text-xs text-zinc-500 dark:text-zinc-400 md:right-4">
+          Updated {lastUpdatedAt.toLocaleDateString("en-US", { month: "numeric", day: "numeric" })}
+        </p>
         <div className="w-10" />
         <div className="text-center">
-          <p className="text-4xl font-semibold tracking-tight text-zinc-900">Our Finances</p>
-          <p className="mt-1 text-sm font-medium text-zinc-500">Tracking Period: {monthLabel}</p>
+          <p className="text-4xl font-semibold tracking-tight text-zinc-900 dark:text-zinc-50">Our Finances</p>
+          <p className="mt-1 text-sm font-medium text-zinc-500 dark:text-zinc-400">Tracking Period: {monthLabel}</p>
         </div>
-        <button
-          type="button"
-          className="flex h-10 w-10 items-center justify-center rounded-full text-2xl text-zinc-500"
-          aria-label="More options"
-        >
-          ...
-        </button>
+        <SettingsPanel users={data.users} onSettingsSaved={() => router.refresh()} />
       </header>
 
       <HeaderSummary
+        month={data.month}
         income={data.income}
         necessityExpenses={data.totals.necessityExpenses}
         dailyExpenses={data.totals.dailyExpenses}
         remainingToSpend={data.totals.remainingToSpend}
-        lastUpdatedAt={lastUpdatedAt}
         onSaveIncome={saveIncome}
       />
 
